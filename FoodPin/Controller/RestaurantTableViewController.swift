@@ -23,6 +23,15 @@ class RestaurantTableViewController: UITableViewController {
     var restaurantImages = ["cafedeadend.jpg", "homei.jpg", "teakha.jpg", "cafeloisl.jpg", "petiteoyster.jpg", "forkeerestaurant.jpg", "posatelier.jpg", "bourkestreetbakery.jpg", "haighschocolate.jpg", "palominoespresso.jpg", "upstate.jpg", "traif.jpg", "grahamavenuemeats.jpg", "wafflewolf.jpg", "fiveleaves.jpg", "cafelore.jpg", "confessional.jpg","barrafina.jpg", "donostia.jpg", "royaloak.jpg", "caskpubkitchen.jpg"]
     
     
+    var restaurantLocations = ["Hong Kong", "Hong Kong", "Hong Kong", "Hong Kong", "Hong Kong", "Hong Kong", "Hong Kong", "Sydney", "Sydney", "Sydney", "New York", "New York", "New York", "New York", "New York", "New York", "New York", "London", "London", "London", "London"]
+    
+    var restaurantTypes = ["Coffee & Tea Shop", "Cafe", "Tea House", "Austrian / Causual Drink", "French", "Bakery", "Bakery", "Chocolate", "Cafe", "American / Seafood", "American", "American", "Breakfast & Brunch", "Coffee & Tea", "Coffee & Tea", "Latin American", "Spanish", "Spanish", "Spanish", "British", "Thai"]
+    
+    // fixes bug
+    var restaurantIsVisited = Array(repeating: false, count: 21)
+    
+   
+    
     //-------------------
     
     
@@ -33,6 +42,7 @@ class RestaurantTableViewController: UITableViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
     
     //-------------------
     
@@ -55,6 +65,7 @@ class RestaurantTableViewController: UITableViewController {
     
 
     //------------------- for function...
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -72,9 +83,23 @@ class RestaurantTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as!
         RestaurantTableViewCell
         
+        cell.nameLabel.text = restaurantNames[indexPath.row]
+       
+        cell.thumbnailImageView.image = UIImage(named: restaurantImages[indexPath.row])
+        cell.locationLabel.text = restaurantLocations[indexPath.row]
+        cell.typeLabel.text = restaurantTypes[indexPath.row]
         
+        // edits for the cell visuals..
+        cell.thumbnailImageView.layer.cornerRadius = 30.0
+        cell.thumbnailImageView.layer.masksToBounds = true
         
-        
+        // fixes bug
+        if restaurantIsVisited[indexPath.row] {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+        return cell
     }
 
     /*
@@ -85,17 +110,69 @@ class RestaurantTableViewController: UITableViewController {
     }
     */
 
-    /*
+//--------------------- for Actions
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // create an option menu as an action sheet
+        let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
+        
+        // add Actions to the menu
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        // calling the option menu's cancel action
+        optionMenu.addAction(cancelAction)
+        
+        //display the menu
+        
+        present(optionMenu, animated: true, completion: nil)
+        
+        
+        
+        //add Calling Action
+        let callingActionHandler = {(action: UIAlertAction) -> Void in
+            let alertMessage = UIAlertController(title: "Service Unavailible", message: "Sorry the call feature is not unavailible yet. Please try later.", preferredStyle: .alert)
+            alertMessage.addAction(UIAlertAction(title:"OK", style: .default, handler: nil))
+            self.present(alertMessage, animated: true, completion: nil)
+        }
+        
+        let callAction = UIAlertAction(title: "Call" + "123-000-\(indexPath.row)", style: .default, handler: callingActionHandler)
+        optionMenu.addAction(callAction)
+        
+        let checkInAction = UIAlertAction(title: "Check-In", style: .default, handler: {
+            (action: UIAlertAction!) -> Void in
+            let cell = tableView.cellForRow(at: indexPath)
+            cell?.accessoryType = .checkmark
+            
+            // fixes bug
+        self.restaurantIsVisited[indexPath.row] = true
+        })
+        optionMenu.addAction(checkInAction)
+        
+        
+        // to get rid of the selection highlight...
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+       
+    }
+
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+    
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            
+            print("There are \(restaurantNames.count) items left")
+            for name in restaurantNames {
+                print(name)
+            }
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
+        
+        
     }
-    */
+
 
     /*
     // Override to support rearranging the table view.

@@ -1,3 +1,4 @@
+/*
 //
 //  ViewController.swift
 //  FoodPin
@@ -8,10 +9,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
 
     //------------------- for outlets
-    @IBOutlet weak var tableView: UITableView!
 
     
     //-------------------
@@ -39,18 +39,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
  
     //------------------- for function
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       return restaurantNames.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        cell.textLabel?.text = restaurantNames[indexPath.row]
-        cell.imageView?.image = UIImage(named: restaurantImages[indexPath.row])
-        
-        return cell
-    }
+
     
 //-------------------
    
@@ -68,4 +57,4 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
 
 }
-
+*/
